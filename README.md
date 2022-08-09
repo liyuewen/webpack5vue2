@@ -1,0 +1,3 @@
+# webpack5vue2
+通过webpack来打包vue,并且增加了可扩展性,比如在打包时增加electron打包
+使用vue2的类写法来开发
