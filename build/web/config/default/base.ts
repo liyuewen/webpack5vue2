@@ -4,6 +4,7 @@ import WebpackBar from 'webpackbar'
 import HTMLPlugin from 'html-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 import path from 'path'
+import VueTsxTransformer from 'vue-tsx-transformer'
 
 const BaseDefaultConfig: Configuration = {
 	entry: baseConfig.entry,
@@ -11,6 +12,7 @@ const BaseDefaultConfig: Configuration = {
 		appendOnly: true,
 		level: 'warn',
 	},
+	target: ['web', 'es5'],
 	stats: {
 		preset: 'errors-only',
 	},
@@ -25,20 +27,19 @@ const BaseDefaultConfig: Configuration = {
 		rules: [
 			{
 				test: /\.tsx$/,
-				exclude: /node_modules/,
 				use: [
 					{
-						loader: 'babel-loader',
+						loader: 'ts-loader',
 						options: {
-							presets: [
-								[
-									'@vue/jsx',
-									{
-										vModel: false,
-									},
-								],
-							],
-							plugins: [require.resolve('../../modules/jsx-loader/vModel.js')],
+							transpileOnly: true,
+							getCustomTransformers: () => ({
+								before: [VueTsxTransformer({})],
+							}),
+							compilerOptions: baseConfig.isDev()
+								? undefined
+								: {
+										target: 'ES5',
+								  },
 						},
 					},
 					{
@@ -47,13 +48,17 @@ const BaseDefaultConfig: Configuration = {
 				],
 			},
 			{
-				test: /\.(tsx|ts)$/,
+				test: /\.ts$/,
 				use: [
 					{
 						loader: 'ts-loader',
 						options: {
-							transpileOnly: true, // 禁用 type checking
-							appendTsSuffixTo: [/\.vue$/],
+							transpileOnly: true,
+							compilerOptions: baseConfig.isDev()
+								? undefined
+								: {
+										target: 'ES5',
+								  },
 						},
 					},
 				],
@@ -104,33 +109,40 @@ const BaseDefaultConfig: Configuration = {
 				],
 			},
 			{
-				test: /\.(jpg|png)$/,
-				use: [
-					{
-						loader: 'url-loader',
-						options: {
-							limit: 512,
-							esModule: false,
-							fallback: {
-								loader: require.resolve('file-loader'),
-								options: {
-									name: path.resolve(
-										__dirname,
-										'../../../../dist/img/[name].[hash:7].[ext]'
-									),
-								},
-							},
-						},
+				test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+				issuer: /\.(s)?css/,
+				type: 'asset',
+				parser: {
+					dataUrlCondition: {
+						maxSize: 10 * 1024,
 					},
-				],
+				},
+				generator: {
+					filename: 'static/[name].[hash:7].[ext]',
+				},
 			},
 			{
-				test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-				loader: 'file-loader',
-				options: {
-					limit: 10000,
-					name: 'static/[name].[hash:7].[ext]',
-					publicPath: './',
+				test: /\.(jpg|png)$/,
+				type: 'asset',
+				parser: {
+					dataUrlCondition: {
+						maxSize: 10 * 1024,
+					},
+				},
+				generator: {
+					filename: 'static/img/[name].[hash:7].[ext]',
+				},
+			},
+			{
+				test: /\.svg/,
+				type: 'asset',
+				parser: {
+					dataUrlCondition: {
+						maxSize: 10 * 1024,
+					},
+				},
+				generator: {
+					filename: 'static/[name].[hash:7].[ext]',
 				},
 			},
 		],

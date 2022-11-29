@@ -43,12 +43,9 @@ export default class WebRun implements RunType {
 		try {
 			const compiler = webpack(config)
 
-			this.handleHooks(compiler)
-
 			const server = new WebpackDevServer(
 				{
 					hot: true,
-					port: baseConfig.prot,
 					liveReload: false,
 					allowedHosts: 'all',
 					compress: true,
@@ -66,6 +63,8 @@ export default class WebRun implements RunType {
 			server.startCallback(err => {
 				if (!!err) {
 					console.log('server start error', err)
+				} else {
+					this.handleHooks(server)
 				}
 			})
 		} catch (error) {
@@ -77,7 +76,8 @@ export default class WebRun implements RunType {
 		deleteSync([baseConfig.output.path])
 		const compiler = webpack(config, (err, stats) => {
 			if (!!err || !stats) {
-				throw err
+				console.log(err)
+				return
 			}
 			if (stats.hasErrors()) {
 				console.log(stats.toString())
@@ -87,23 +87,26 @@ export default class WebRun implements RunType {
 		})
 	}
 
-	handleHooks(compiler: webpack.Compiler) {
-		compiler.hooks.done.tap('done', stats => {
+	handleHooks(server: WebpackDevServer) {
+		const { host, port } = server.options
+		server.compiler.hooks.done.tap('done', (stats: any) => {
 			process.stdout.write(
 				process.platform === 'win32' ? '\x1B[2J\x1B[0f' : '\x1B[2J\x1B[3J\x1B[H'
 			)
 			console.log(
-				`\n web项目运行在: http://${this.ip}:${baseConfig.prot}\n web项目运行在: http://localhost:${baseConfig.prot}`
+				`\n web项目运行在: http://${WebUtils.getIPAdress(
+					host
+				)}:${port}\n web项目运行在: http://localhost:${port}`
 			)
 			console.log('\n time:', stats.toJson().time + ' ms')
 		})
 
-		compiler.hooks.done.tap('error', stats => {
-			stats.compilation.errors.forEach(v => {
+		server.compiler.hooks.done.tap('error', (stats: any) => {
+			stats.compilation.errors.forEach((v: any) => {
 				if (typeof v == 'string') {
-					console.log(v)
+					console.log('compiler[done]:', v)
 				} else {
-					console.log(v.message)
+					console.log('compiler[done]:', v.message)
 				}
 			})
 		})

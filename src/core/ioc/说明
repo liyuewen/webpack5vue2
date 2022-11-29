@@ -1,4 +1,0 @@
-每次收集时先存在container-registry中
-当运行类装饰器进行注入时，如果container装饰器先运行会把当前container-registry中的依赖打上标记，并把当前依赖丢到当前类的元组中
-标明当前这些依赖属于那个容器，
-再运行service装饰器先根据当前类进行取如果从container-registry中取到数据则进行注入
