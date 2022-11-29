@@ -6,14 +6,20 @@ const routes: Array<RouteConfig> = [
 		component: () =>
 			import(/* webpackChunkName: 'index' */ '@/layout/index/index'),
 		redirect: {
-			name: 'manage',
+			name: 'demo',
 		},
 		children: [
 			{
-				path: '/manage',
-				name: 'manage',
+				path: '/demo',
+				name: 'demo',
 				component: () =>
 					import(/* webpackChunkName: 'demo' */ '@/pages/demo/index'),
+			},
+			{
+				path: '/demo2',
+				name: 'demo2',
+				component: () =>
+					import(/* webpackChunkName: 'demo' */ '@/pages/demo2/index'),
 			},
 		],
 	},

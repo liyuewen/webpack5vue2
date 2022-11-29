@@ -14,6 +14,6 @@ export default class Demo extends Vue {
 	@Prop() readonly server!: IText
 
 	protected render() {
-		return <div>{this.server.text}</div>
+		return <span>{this.server.text}</span>
 	}
 }
