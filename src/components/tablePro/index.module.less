@@ -1,0 +1,126 @@
+.customScrollBar() {
+	&::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 2px;
+		background: transparent;
+	}
+
+	&::-webkit-scrollbar-track {
+		border-radius: 2px;
+		background: rgba(0, 0, 0, 0.05);
+	}
+
+	&:hover::-webkit-scrollbar-thumb {
+		border-radius: 2px;
+		background: rgba(0, 0, 0, 0.1);
+	}
+}
+
+.tablePro {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	overflow-x: auto;
+
+	.tableProWrap {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+
+		.tableHead {
+			.tableHeadTable {
+				border-bottom: none;
+				.headTh {
+					&:nth-last-of-type(2) {
+						border-right: none;
+					}
+				}
+			}
+		}
+
+		.tableContent {
+			flex: 1;
+			overflow: auto;
+			position: relative;
+			.customScrollBar();
+
+			.tableMainTable {
+				border-top: none;
+				.tableProBodyTr {
+					&:last-of-type {
+						.tableProColumns {
+							border-bottom: none;
+						}
+					}
+
+					td {
+						padding: 12px 0;
+						min-width: 0;
+						box-sizing: border-box;
+						text-overflow: ellipsis;
+						vertical-align: middle;
+						position: relative;
+					}
+
+					.tableProColumns {
+						border-bottom: 1px solid;
+						border-right: 1px solid;
+						border-color: #535353;
+
+						.cell {
+							box-sizing: border-box;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							white-space: normal;
+							word-break: break-all;
+							line-height: 23px;
+							padding-left: 10px;
+							padding-right: 10px;
+							min-height: 23px;
+						}
+
+						&:last-of-type {
+							border-right: none;
+						}
+					}
+				}
+			}
+		}
+
+		table {
+			-webkit-border-horizontal-spacing: 0px;
+			-webkit-border-vertical-spacing: 0px;
+			border-top-width: 0px;
+			border-bottom-width: 0px;
+			border-left-width: 0px;
+			border-right-width: 0px;
+		}
+
+		.table {
+			font-size: 14px;
+			color: #909399;
+			overflow: hidden;
+			th {
+				box-sizing: border-box;
+			}
+			.tableProThead {
+				.tableProTh {
+				}
+
+				.tableProColumns {
+					border-bottom: 1px solid;
+					border-right: 1px solid;
+					border-color: #535353;
+					&:last-of-type {
+						border-right: none;
+					}
+				}
+			}
+		}
+	}
+}

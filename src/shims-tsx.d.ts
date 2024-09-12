@@ -25,6 +25,7 @@ declare global {
 			onkeyup?: (event: KeyboardEvent) => void
 			onDragover?: (event: DragEvent) => void
 			onDrop?: (event: DragEvent) => void
+			onScroll?: (event: Event) => void
 			ref?: string
 			key?: string | number
 			class?: string | string[]

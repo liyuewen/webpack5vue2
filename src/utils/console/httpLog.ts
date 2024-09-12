@@ -1,7 +1,10 @@
 import Utils from '../utils'
 
 export default class HttpLog {
-	public static async params(url: string, params?: { data: any; params: any, headers: any }) {
+	public static async params(
+		url: string,
+		params?: { data: any; params: any; headers: any }
+	) {
 		const paramsStr = Utils.isExists(params) ? params : '无参数'
 		console.log(
 			`%c url: %c ${url} %c \n\r%c 请求参数: `,

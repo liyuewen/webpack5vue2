@@ -5,6 +5,7 @@ import HTMLPlugin from 'html-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 import path from 'path'
 import VueTsxTransformer from 'vue-tsx-transformer'
+import NodePolyfillPlugin from "node-polyfill-webpack-plugin"
 
 const BaseDefaultConfig: Configuration = {
 	entry: baseConfig.entry,
@@ -148,6 +149,7 @@ const BaseDefaultConfig: Configuration = {
 		],
 	},
 	plugins: [
+		new NodePolyfillPlugin(),
 		new WebpackBar(),
 		new HTMLPlugin(baseConfig.htmlTemplate),
 		new CopyPlugin({
